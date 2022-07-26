@@ -24,7 +24,8 @@
 
 
 USAGE :
-
+-> create trial snowflake account
+-> Download the dataset from http://jmcauley.ucsd.edu/data/amazon/links.html
 -> Fire up the main.py --scheduled to run daily at 5 Pm  
 -> Run the files specified below for further exploration.
 
