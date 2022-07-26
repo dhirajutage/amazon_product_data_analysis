@@ -1,0 +1,31 @@
+
+create or replace view amazon.amazon_prod.vw_lnd_reviews_fact as
+ SELECT 
+    REVIEWERID ,
+	ASIN ,
+	HELPFUL, 
+	REVIEWTEXT,
+	OVERALL,
+	SUMMARY ,
+    UNIXREVIEWTIME,
+    REVIEWTIME,
+    
+ row_number() over( partition by reviewerid,asin
+                     order by asin) as row_num
+    from 
+    (
+    SELECT 
+    REVIEWERID ,
+	ASIN ,
+	HELPFUL, 
+	REVIEWTEXT,
+	OVERALL,
+	SUMMARY ,
+	to_timestamp_ntz(UNIXREVIEWTIME) as UNIXREVIEWTIME,
+	try_to_date(replace(REVIEWTIME,','),'mm dd yyyy') as REVIEWTIME
+    
+    FROM 
+        amazon.amazon_prod.lnd_reviews
+     --where asin = '0007182791'    
+    )
+    qualify row_num =1 ;

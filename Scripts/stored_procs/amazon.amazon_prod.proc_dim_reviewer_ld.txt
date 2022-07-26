@@ -1,0 +1,43 @@
+create or replace procedure amazon.amazon_prod.proc_dim_reviewer_ld()
+returns float not null
+language javascript
+as     
+$$  
+
+try {
+
+var step_num = 1
+var step_desc = "Create temp table "
+var sql_stmt = `create or replace temporary table amazon.amazon_prod.revier_dim as
+                select * from amazon.amazon_prod.vw_stg_reviewer_dim;`
+
+var result = snowflake.execute({sqlText: sql_stmt })
+
+var sql_stmt = """merge into amazon.amazon_prod.reviewer_dim tar
+using (select  upper(split_part(reviewername,'\"' ,1)) as reviewername,reviewerid,
+               row_number() over(partition by trim(reviewerid)  order by reviewername nulls last) as row_num
+               from amazon.amazon_prod.revier_dim  
+               qualify row_num = 1) src
+on   trim(tar.reviewer_id) = trim(src.reviewerid)
+when matched and( trim(tar.reviewer_name) !=  trim(src.reviewername))
+then update set tar.reviewer_name = trim(src.reviewername) 
+when not matched then
+insert (
+reviewer_id, 
+reviewer_name    
+)
+values(src.reviewerid, src.reviewername);"""
+
+var result_1 = snowflake.execute({sqlText: sql_stmt })
+
+return "Success"
+}
+
+catch (err)  {
+ 
+ var error_code = err.code
+ var error_message = err.err.message
+return "Failure"
+}
+
+$$

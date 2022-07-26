@@ -1,0 +1,7 @@
+snowflake:
+  file_path: "C://Users//apeks//metadata"
+  table_name: 'lnd_metadata'
+  source: 'load_lnd_metadata'
+  layer : 'LANDING'
+  database: 'AMAZON'
+  schema: 'AMAZON_PROD'

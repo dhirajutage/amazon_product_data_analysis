@@ -1,0 +1,4 @@
+create or replace view amazon.amazon_prod.vw_dim_product_category as
+select distinct upper(split_part(replace(replace( replace(categories,'[['),']]'),'\"'),',',1)) as categories 
+from amazon.amazon_prod.lnd_metadata
+where categories is not null ;

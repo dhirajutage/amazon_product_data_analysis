@@ -1,0 +1,20 @@
+create or replace view amazon.amazon_prod.vw_dim_products as
+select 
+    asin ,
+    to_variant(salesrank) as salesrank,
+    imurl ,
+    id ,
+    title ,
+    description ,
+    price ,
+    to_variant(related) as related ,
+    brand,
+    null as start_date ,
+    null as end_date ,
+    null as is_active,
+    row_number() over(partition by asin ,id order by id nulls last) as row_num
+    from amazon.amazon_prod.lnd_metadata meta,
+         amazon.amazon_prod.dim_product_category cat
+    where upper(split_part(replace(replace
+          ( replace(meta.categories,'[['),']]'),'\"'),',',1)) = cat.category_name
+    qualify row_num = 1    

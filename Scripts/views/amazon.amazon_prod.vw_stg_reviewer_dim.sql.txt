@@ -1,0 +1,9 @@
+
+create or replace view amazon.amazon_prod.vw_stg_reviewer_dim as
+
+    SELECT distinct
+    reviewerid,
+    reviewername
+    FROM 
+        amazon.amazon_prod.lnd_reviews
+    
