@@ -1,7 +1,7 @@
 snowflake:
   file_path: "C://Users//apeks"
   table_name: 'lnd_reviews'
-  source: 'load_lnd_review'
+  source: 'load_lnd_review' 
   layer : 'LANDING'
   database: 'AMAZON'
   schema: 'AMAZON_PROD'
